@@ -1,0 +1,26 @@
+{
+  "Test01" : {
+    "Title" : "Understanding what can be expected from ResNet50",
+    "methods" : {
+      "deeplift" : "DeepLift",
+      "gradcam" : "GradCam",
+      "guided_backpropagation" : "Guided Backpropagation",
+      "integrated_gradient" : "Integrated Gradient",
+      "layer_wise_relevance_propagation" : "Layer-wise Relevance Propagation:",
+      "saliency_map" : "Saliency Map",
+      "smothgrad" : "SmothGrad"
+    },
+    "q01" : {
+      "checkbox1" : "Which were the most useful methods to understand the classification as a duck?",
+      "form01" : "Describe how you know what the system focused on.",
+      "form02" : "Other comments.",
+      "question" : "Why is this image classified as a duck?"
+    },
+    "q02" : {
+      "checkbox1" : "Which were the most useful methods to understand the classification as a monkey?",
+      "form01" : "Describe how you know what the system focused on.",
+      "form02" : "Other comments.",
+      "question" : "Why is this image classified as a duck?"
+    }
+  }
+}

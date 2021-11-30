@@ -7,7 +7,22 @@
   background-color: lightgray;
 }
 
-.FBAimage{
+#FBA{
   width:224px;
   height:224px;
+}
+
+#FBA_wait{
+  width:50px;
+  height:50px;
+}
+
+#XAIimage_waiting{
+  margin: 62px;
+}
+
+.waiting{
+  /* display:none; */
+   padding-left: 150px;
+
 }

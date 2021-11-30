@@ -3,15 +3,24 @@
   <head>
     <meta charset="utf-8">
     <title>Start page</title>
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.5.0/firebase-database-compat.js"></script>
   </head>
   <body>
-    <div>
-      <p>Äpple <span>Granny Smith</span></p>
-      <img src="fruit-apple-gs.jpg" alt="Green apple">
-    </div>
-    <div>
-      <p>Äpple <span>Ingrid Marie</span></p>
-      <img src="fruit-apple-im.jpg" alt="Red apple">
-    </div>
+    <script>
+     var config = {
+       apiKey: "AIzaSyBAQ2Tmn4lOu7IYRQq1Fz5DJA4jPKfcJT8",
+       authDomain: "fba-and-inr.firebaseapp.com",
+       databaseURL: "https://fba-and-inr-default-rtdb.europe-west1.firebasedatabase.app",
+       projectId: "fba-and-inr",
+       storageBucket: "fba-and-inr.appspot.com",
+       messagingSenderId: "236289404577",
+     };
+     // Get a reference to the database service
+     firebase.initializeApp(config);
+     // var database = firebase.database();
+
+     </script>
+     <script src="js/test.js"></script>
   </body>
 </html>
