@@ -7,7 +7,7 @@
   background-color: lightgray;
 }
 
-#FBA{
+.FBAimage{
   width:224px;
   height:224px;
 }
@@ -18,11 +18,16 @@
 }
 
 #XAIimage_waiting{
-  margin: 62px;
+  margin: 50px;
 }
 
 .waiting{
   /* display:none; */
    padding-left: 150px;
+
+}
+
+.pred{
+  font-size: small;
 
 }

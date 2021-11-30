@@ -39,37 +39,28 @@
         </div>
       </div>
     </nav>
-    <!-- Jumbotron -->
-
-    <!-- Jumbotron -->
   </header>
   <div class="p-3 text-center bg-light">
     <h2 class="mb-3" id="studyTitle">..</h2>
-    <h3 class="mb-3">Why is this image classified as a duck?</h3>
+    <h3 class="mb-3" id="question">...</h3>
+    <div class="container">
+    <div class="row">
+      <div class="col-sm pred" id="pred_acc">...</div>
+    </div>
   </div>
-  <div class="container mb-5">
+  </div>
+  <div class="container mb-5 mt-5" >
     <div class="row align-items-start">
-      <div class="col align-self-center">
-        <img src="images/duck.png" class="rounded float-start FBAimage" alt="Ducks in a pond">
+      <div class="col align-self-center" >
+        <img src="images/loading.gif" class="rounded float-start FBAimage" id="image_start" alt="Ducks in a pond">
       </div>
-      <!-- <div class="col">
-        <ul class="list-group" id="FBA_items_old">
-          <li class="list-group-item marker " id="Saliency_map">Saliency map</li>
-          <li class="list-group-item" id="Integrated_Gradient">Integrated Gradient</li>
-          <li class="list-group-item" id="SmothGrad">SmothGrad</li>
-          <li class="list-group-item" id="GradCAM">GradCAM</li>
-          <li class="list-group-item" id="Layer-wise_Relevance_Propagation">Layer-wise Relevance Propagation</li>
-          <li class="list-group-item" id="DeepLift">DeepLIFT</li>
-          <li class="list-group-item" id="Guided_Backpropagation">Guided Backpropagation</li>
-        </ul>
-      </div> -->
       <div class="col">
         <ul class="list-group" id="FBA_items">
         </ul>
       </div>
       <div class="col align-self-center">
         <div id="XAIimage">
-          <img src="images/saliencymap_duck.png" class="rounded float-end FBAimage" id="FBA" alt="...">
+          <img src="images/loading.gif" class="rounded float-end FBAimage" id="FBA" alt="...">
         </div>
         <div class="waiting" id="XAIimage_waiting">
           <img src="images/Pendulum.gif" id="FBA_wait" alt="...">
@@ -79,7 +70,7 @@
     </div>
   </div>
 
-  <div class="container mb-5">
+  <div class="container mb-5" id="answers">
     <!-- drake 0.2185286581516266
 red-breasted merganser 0.04625878855586052
 maillot 0.038603659719228745
@@ -90,37 +81,20 @@ miniature poodle 0.057969436049461365
 Bedlington terrier 0.043795451521873474
 Irish water spaniel 0.018107106909155846
 Afghan hound 0.003810434602200985 -->
-    <label for="checkbox_Saliency_map" class="form-label">Which were the most useful methods to understand the classification as a duck?</label>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="checkbox_Saliency_map">
-      <label class="form-check-label" for="checkbox_Saliency_map">
-        Saliency_map
-      </label>
-    </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" value="" id="checkbox_Integrated_Gradient">
-      <label class="form-check-label" for="checkbox_Integrated_Gradient">
-        Integrated_Gradient
-      </label>
-    </div>
-    <label for="describe" class="form-label">Describe how you know what the system focused on.</label>
-    <textarea class="form-control" id="describe" rows="3"></textarea>
-    <label for="comments" class="form-label">Other comments.</label>
-    <textarea class="form-control" id="comments" rows="3"></textarea>
   </div>
   <div class="container ">
     <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
       <div class="btn-group" role="group" aria-label="First group">
-        <button type="button" class="btn btn-outline-secondary">&larr;</button>
+        <button type="button" class="btn btn-outline-secondary" id="backQuestion">&larr;</button>
       </div>
       <div class="input-group">
-        <button type="button" class="btn btn-outline-secondary">Save and next &rarr;</button>
+        <button type="button" class="btn btn-outline-secondary" id="nextQuestion">Save and next &rarr;</button>
       </div>
     </div>
   </div>
   <div class="container">
     <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-      <p class="col-md-4 mb-0 text-muted">&copy; 2021 Lars Holmberg Malmö University</p>
+      <p class="col-md-4 mb-0 text-muted">&copy; 2021 Lars Holmberg, Malmö University</p>
       <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
         <svg class="bi me-2" width="40" height="32">
           <use xlink:href="#bootstrap" />
@@ -139,54 +113,6 @@ Afghan hound 0.003810434602200985 -->
   <!-- Content here -->
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-<!-- <script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script> -->
-<!--<script src="https://www.gstatic.com/firebasejs/3.7.1/firebase.js"></script>-->
-<!-- <script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js'
-  const firebaseConfig = {
-    apiKey: "AIzaSyBAQ2Tmn4lOu7IYRQq1Fz5DJA4jPKfcJT8",
-    authDomain: "fba-and-inr.firebaseapp.com",
-    databaseURL: "https://fba-and-inr-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "fba-and-inr",
-    storageBucket: "fba-and-inr.appspot.com",
-    messagingSenderId: "236289404577",
-    appId: "1:236289404577:web:9296a2e4f4e5dbd9f54ae0",
-    measurementId: "G-HX7M7PBL8T"
-  };
-  const app = initializeApp(firebaseConfig);
-  export {app};
-  // const app = initializeApp(firebaseConfig);
-</script> -->
-  <!-- <script type="module">
-    // Import the functions you need from the SDKs you need
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-    import {
-      getAnalytics
-    } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
-    // TODO: Add SDKs for Firebase products that you want to use
-    // https://firebase.google.com/docs/web/setup#available-libraries
-
-    // Your web app's Firebase configuration
-    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-    const firebaseConfig = {
-      apiKey: "AIzaSyBAQ2Tmn4lOu7IYRQq1Fz5DJA4jPKfcJT8",
-      authDomain: "fba-and-inr.firebaseapp.com",
-      databaseURL: "https://fba-and-inr-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "fba-and-inr",
-      storageBucket: "fba-and-inr.appspot.com",
-      messagingSenderId: "236289404577",
-      appId: "1:236289404577:web:9296a2e4f4e5dbd9f54ae0",
-      measurementId: "G-HX7M7PBL8T"
-    };
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    // #var deviceRef = app.ref('Test01/');
-    // export declare function getApp(): FirebaseApp;
-    // console.log(app.getApp());
-  </script> -->
   <script>
    var config = {
      apiKey: "AIzaSyBAQ2Tmn4lOu7IYRQq1Fz5DJA4jPKfcJT8",
@@ -199,10 +125,8 @@ Afghan hound 0.003810434602200985 -->
    // Get a reference to the database service
    firebase.initializeApp(config);
    var database = firebase.database();
-
    </script>
-   <script src="js/test.js"></script>
+   <!-- <script src="js/test.js"></script> -->
   <script type="module" src="js/main.js"></script>
 </body>
-
 </html>

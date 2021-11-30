@@ -1,0 +1,30 @@
+{
+   "q01":{
+      "checkbox1":"Which were the most useful methods to understand the classification as a duck?",
+      "form01":"Describe how you know what the system focused on?",
+      "form02":"Other comments.",
+      "img":"duck.png",
+      "question":"Why is this image classified as a Drake?"
+   },
+   "q02":{
+      "checkbox1":"Which were the most useful methods to understand the classification as a monkey?",
+      "form01":"Describe how you know what the system focused on?",
+      "form02":"Other comments.",
+      "img":"dogwoman.png",
+      "question":"Why is this image classified as a Standard Poodle?"
+   },
+   "q03":{
+      "checkbox1":"Which were the most useful methods to understand the classification as a monkey?",
+      "form01":"Describe how you know what the system focused on?",
+      "form02":"Other comments.",
+      "img":"duck.png",
+      "question":"Why is this image classified as a q3?"
+   },
+   "q04":{
+      "checkbox1":"Which were the most useful met?",
+      "form01":"Describe how you know what the system focused on?",
+      "form02":"Other comments.",
+      "img":"dogwoman.png",
+      "question":"Why is this image classified as a q4?"
+   }
+}
