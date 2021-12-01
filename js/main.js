@@ -4,11 +4,6 @@ var actimage = "";
 var actquestion = null;
 var questions;
 let methods = [];
-//import {getIt, app, create, createReportList } from './fb.js';
-//import { app} from './';
-//'use strict';
-// const app = initializeApp(firebaseConfig);
-//Wait till all content is loaded, could be external fonts scripts from other servers etc....
 if (document.readyState != 'loading'){
   onDocumentReady();
 } else {
@@ -40,7 +35,6 @@ function getFirebase(){
                 });
                 //get the questions
                 questions = snapshot.child('questions').toJSON();
-                console.log(questions);
                 var count = Object.keys(questions).length;
                 if (count>0){
                   actquestion= "q01";
@@ -64,7 +58,6 @@ function addListeners(){
       var target = getEventTarget(event);
       clearAllMarks();
       target.classList.add('marker');
-      console.log('../images/'+target.id+'_'+actimage);
       document.getElementById('FBA').src='../images/'+target.id+'_'+actimage;
   };
   document.getElementById('nextQuestion').addEventListener("click",function() {
@@ -77,9 +70,7 @@ function addListeners(){
         updateActQuestion(true);
         setQuestion(actquestion);
   });
-
     document.getElementById('FBA').addEventListener("error", function(){
-      console.log("Fan");
       document.getElementById('FBA').src="images/not-found-image.jpg"
     });
 }
@@ -88,7 +79,6 @@ function addListeners(){
 function updateActQuestion(back) {
   var tempquestion = actquestion;
   if (back) {
-    console.log(back, actquestion);
     var numberNow = actquestion.substring(1, 3);
     if (parseInt(numberNow) > 1) {
       numberNow = numberNow - 1;
@@ -100,7 +90,6 @@ function updateActQuestion(back) {
       document.getElementById("nextQuestion").innerHTML="Save and next &rarr;";
     }
   } else {
-    console.log(back, actquestion);
     for (var key of Object.keys(questions)) {
       if (key == actquestion) {
         var number = key.substring(1, 3);
@@ -117,12 +106,9 @@ function updateActQuestion(back) {
     actquestion = tempquestion;
     var numberNow = actquestion.substring(1, 3);
     if (parseInt(numberNow) >= Object.keys(questions).length) {
-      console.log("FINI");
       document.getElementById("nextQuestion").innerHTML = "Exit";
     }
-    console.log(numberNow, Object.keys(questions).length);
   }
-  console.log(actquestion);
 }
 
 function setQuestion(q_number){
@@ -133,7 +119,6 @@ function setQuestion(q_number){
   document.getElementById("XAIimage_waiting").style.display = "block";
   for (var key of Object.keys(questions)) {
       if(key==actquestion){
-        console.log(key + " -> " + questions[key].img)
         actimage = questions[key].img;
         document.getElementById('image_start').src='../images/'+actimage;
         document.getElementById('question').innerHTML=questions[key].question;
@@ -144,7 +129,6 @@ function setQuestion(q_number){
         if (actquestion=="q02"){
           document.getElementById('pred_acc').innerHTML="Confidence level: <b>Standard Poodle</b> 86%, <b>Miniature Poodle</b> 6%, <b>Bedlington terrier</b> 4%, <b>Irish water spaniel</b> 1%, <b>Afghan Hound</b> 0.3%";
         }
-
         //questionCheckBox
         var div = document.createElement('div');
         div.id = "checkbox1";
@@ -185,7 +169,6 @@ function setQuestion(q_number){
 }
 
 function createTextarea(formnumber,question)   {
-  console.log(question);
   var label = document.createElement('label');
   label.className = "form-label";
   label.for = formnumber;
@@ -198,49 +181,6 @@ function createTextarea(formnumber,question)   {
   document.getElementById("answers").appendChild(label);
   document.getElementById("answers").appendChild(textarea);
 }
- // document.getElementById('FBA_items').addEventListener("click",xaiMethod)
- // function xaiMethod() {
- //   var target=getEventTarget(event);
- //   document.getElementById(target).src= '../images/saliencymap_duck.png'
- //   console.log(target.id);
- // }
-
-
-// document.querySelector("#Saliency_map").onclick = function() {
-//     document.getElementById('FBA').src= '../images/saliencymap_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#Integrated_Gradient").onclick = function() {
-//     document.getElementById('FBA').src='../images/ig_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#SmothGrad").onclick = function() {
-//     document.getElementById('FBA').src='../images/sg_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#GradCAM").onclick = function() {
-//     document.getElementById('FBA').src='../images/gradcam_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#Layer-wise_Relevance_Propagation").onclick = function() {
-//     document.getElementById('FBA').src='../images/lrp_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#DeepLift").onclick = function() {
-//     document.getElementById('FBA').src='../images/deeplift_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
-// document.querySelector("#Guided_Backpropagation").onclick = function() {
-//     document.getElementById('FBA').src='../images/gb_duck.png';
-//     clearAllMarks();
-//     this.classList.add('marker');
-// }
 
 function clearAllMarks(){
   var ul = document.getElementById("FBA_items");
