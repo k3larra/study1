@@ -1,0 +1,56 @@
+{
+  "q01" : {
+    "checkbox2" : "What is your level of knowledge in relation to Artificial Intelligence (AI)?;Scientific;Knowledgable;Some knowledge;Mundane",
+    "form01" : "Name some areas where you are knowledgeable, especially when it comes to physical things that can be reproduced in images.",
+    "info1" : "Neural Networks can learn to classify images using some classification, for example identify that an image pictures a Zebra. <br>  Neural networks can even do this on a superhuman level, but, what they cannot do, is explain why a Zebra is identified as a Zebra, for example say that it is an animal that is similar to a horse but got stripes.<br> An active research is on methods that can be used to explain the classification promoted by a Neural Network. In the research that this survey is a part of and we hope you will contribute to, we are interested in understanding how a human can use these methods to understand which tasks a Neural Network does well and where it fails. Consequently, knowing when a system can and cannot be trusted is important since it can prevent intentional and unintentional misuse and point towards how the system can be improved.<br> In this survey we use a trained AI model called ResNet50 and our goal is to understand how some methods that tries to explain decisions can be used. We are also interested in your summary of the model, what it does well and when it fails. ",
+    "layout" : 0,
+    "question" : "Introduction"
+  },
+  "q02" : {
+    "checkbox1" : "Which were the most useful methods to understand the classification as a duck?",
+    "form01" : "Describe how you know what the system focused on?",
+    "form02" : "Other comments.",
+    "img" : "duck.png",
+    "layout" : 1,
+    "question" : "Why is this image classified as a <i>Drake</i>?"
+  },
+  "q03" : {
+    "checkbox1" : "Which were the most useful methods to understand the classification as a monkey?",
+    "form01" : "Describe how you know what the system focused on?",
+    "form02" : "Other comments.",
+    "img" : "dogwoman.png",
+    "layout" : 1,
+    "question" : "Why is this image classified as a <i>Standard Poodle</i>?"
+  },
+  "q04" : {
+    "checkbox1" : "Which were the most useful methods to understand the classification as a monkey?",
+    "form01" : "Describe how you know what the system focused on?",
+    "form02" : "Other comments.",
+    "img" : "flamingo.png",
+    "layout" : 1,
+    "question" : "Why is this image classified as a <i>Flamingo</i>?"
+  },
+  "q05" : {
+    "checkbox1" : "Which were the most useful metods?",
+    "form01" : "Describe how you know what the system focused on?",
+    "form02" : "Other comments.",
+    "img" : "komodo_lizard.png",
+    "layout" : 1,
+    "question" : "Why is this image classified as a <i>Komodo Lizard</i>?"
+  },
+  "q06" : {
+    "checkbox1" : "Which were the most useful metods?",
+    "form01" : "Describe how you know what the system focused on?",
+    "form02" : "Other comments.",
+    "img" : "lemon.png",
+    "layout" : 1,
+    "question" : "Why is this image classified as a <i>Komodo Lizard</i>?"
+  },
+  "q07" : {
+    "form01" : "Can you giva an decription of the models knowledge?",
+    "form02" : "Other comments.",
+    "info1" : "Folkhälsoinformation för alla åldrar och situationer Folkhälsoinformation är sidan som är till för att informera och utbilda inom vanor, konsumtion och aktiviteter som påverkar den generella folkhälsan. I Sverige är Folkhälsomyndigheten (tidigare Folkhälsoinstitutet) den statliga myndighet som är ansvariga för arbete för bättre folkhälsa. FHI har ingen koppling till den statliga myndigheten utan är helt fristående. Syftet med hemsidan är att sprida och informera om tidigare, nuvarande samt framtida projekt vars syfte är och har varit att främja folkhälsan.",
+    "layout" : 0,
+    "question" : "General feedback"
+  }
+}

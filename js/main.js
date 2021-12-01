@@ -15,6 +15,19 @@ function onDocumentReady() {
   document.getElementById("XAIimage").style.display = "none";
   document.getElementById("XAIimage_waiting").style.display = "block";
   getFirebase();
+  document.addEventListener('keydown', function(event) {
+    switch (event.key) { // change to event.key to key to use the above variable
+      case "ArrowLeft":
+        // Left pressed
+        console.log("last");
+        document.getElementById('backQuestion').click();
+        break;
+      case "ArrowRight":
+      console.log("next");
+        document.getElementById('nextQuestion').click();
+        break;
+    }
+  });
 }
 
 function getFirebase(){
@@ -93,17 +106,20 @@ function updateActQuestion(back) {
     for (var key of Object.keys(questions)) {
       if (key == actquestion) {
         var number = key.substring(1, 3);
-        if (Object.keys(questions).length >= number) {
+        if (Object.keys(questions).length > number) {
           number++;
           if (number < 10) {
             tempquestion = "q0" + number;
           } else {
             tempquestion = "q" + number;
           }
+        }else{
+          alert("exit");
         }
       }
     }
     actquestion = tempquestion;
+
     var numberNow = actquestion.substring(1, 3);
     if (parseInt(numberNow) >= Object.keys(questions).length) {
       document.getElementById("nextQuestion").innerHTML = "Exit";
@@ -113,44 +129,93 @@ function updateActQuestion(back) {
 
 function setQuestion(q_number){
   document.getElementById('answers').innerHTML = "";
-  document.getElementById('image_start').src='../images/loading.gif';
-  clearAllMarks();
-  document.getElementById("XAIimage").style.display = "none";
-  document.getElementById("XAIimage_waiting").style.display = "block";
   for (var key of Object.keys(questions)) {
       if(key==actquestion){
-        actimage = questions[key].img;
-        document.getElementById('image_start').src='../images/'+actimage;
         document.getElementById('question').innerHTML=questions[key].question;
-        //Predict if not already done
-        if (actquestion=="q01"){
-          document.getElementById('pred_acc').innerHTML="Confidence level: <b>Drake</b> 21%, <b>Red-Breasted Merganser</b> 5%, <b>Maillot</b> 4%, <b>Prairie Chicken</b> 3%, <b>Leatherback Turtle</b> 3%";
+        if(questions[key].layout==1){ //preset image
+          clearAllMarks();
+          document.getElementById("XAIimage").style.display = "none";
+          document.getElementById("XAIimage_waiting").style.display = "block";
+          document.getElementById('image_start').src='../images/loading.gif';
+          document.getElementById('images-and-methods').style.display = "block";
+          actimage = questions[key].img;
+          document.getElementById('image_start').src='../images/'+actimage;
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML="";
+        } else if (questions[key].layout==0) {
+            console.log("What");
+            document.getElementById('images-and-methods').style.display = "none";
+            document.getElementById('pred_acc').innerHTML=questions[key].info1;
+            document.getElementById('pred_acc').classList.add("text-start");
         }
+        //Predict if not already done
         if (actquestion=="q02"){
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML="Confidence level: <b>Drake</b> 21%, <b>Red-Breasted Merganser</b> 5%, <b>Maillot</b> 4%, <b>Prairie Chicken</b> 3%, <b>Leatherback Turtle</b> 3%";
+        }else if (actquestion=="q03"){
+          document.getElementById('pred_acc').classList.remove("text-start");
           document.getElementById('pred_acc').innerHTML="Confidence level: <b>Standard Poodle</b> 86%, <b>Miniature Poodle</b> 6%, <b>Bedlington terrier</b> 4%, <b>Irish water spaniel</b> 1%, <b>Afghan Hound</b> 0.3%";
+        }else if (actquestion=="q04"){
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML="Confidence level: <b>Flamingo</b> 99%, <b>Goldfish</b> 0.06%, <b>Macaw</b> 0.02%, <b>Spoonbill</b> 0.01%, <b>Crane</b> 0,00%";
+        }else if (actquestion=="q05"){
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML="Confidence level: <b>African Crocodile</b> 16%, <b>Sidewinder</b> 15%, <b>Komodo Dragon</b> 11%, <b>Horned Viper</b> 8%, <b>Frilled Lizard</b> 7%";
+        }else if (actquestion=="q06"){
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML="Confidence level: <b>Lemon</b> 67%, <b>Orange</b> 17%, <b>Spaghetti Squash</b> 12%, <b>Black Widow</b> 0.3%, <b>Pineapple</b> 0.3%";
         }
         //questionCheckBox
-        var div = document.createElement('div');
-        div.id = "checkbox1";
-        var label = document.createElement('label');
-        label.classList.add("form-label");
-        label.innerHTML=questions[key].checkbox1;
-        div.appendChild(label);
-        methods.forEach(function(item, index, array){
-          label = document.createElement("label");
-          label.classList.add("form-check-label");
-          label.innerHTML=item;
-          var input = document.createElement("input");
-          input.classList.add("form-check-input");
-          input.type = "checkbox";
-          input.id = "smuck";
-          var divInner = document.createElement('div');
-          divInner.classList.add("form-check");
-          divInner.appendChild(input);
-          divInner.appendChild(label);
-          div.appendChild(divInner);
-        });
-        document.getElementById("answers").appendChild(div);
+        if(questions[key].checkbox1!=null){
+          var div = document.createElement('div');
+          div.id = "checkbox1";
+          div.classList.add("mt-3");
+          var label = document.createElement('label');
+          label.classList.add("form-label");
+          label.innerHTML=questions[key].checkbox1;
+          div.appendChild(label);
+          methods.forEach(function(item, index, array){
+            label = document.createElement("label");
+            label.classList.add("form-check-label");
+            label.innerHTML=item;
+            var input = document.createElement("input");
+            input.classList.add("form-check-input");
+            input.type = "checkbox";
+            var divInner = document.createElement('div');
+            divInner.classList.add("form-check");
+            divInner.appendChild(input);
+            divInner.appendChild(label);
+            div.appendChild(divInner);
+          });
+          document.getElementById("answers").appendChild(div);
+        }
+        if(questions[key].checkbox2!=null){  //Takes a string separated by ";" and builds a checkbox;
+          const myArray = questions[key].checkbox2.split(";");
+          var div = document.createElement('div');
+          div.classList.add("mt-3");
+          div.id = "checkbox2";
+          var label = document.createElement('label');
+          label.classList.add("form-label");
+          label.innerHTML=myArray[0];
+          div.appendChild(label);
+          for (var i = 1; i < myArray.length; i++) {
+              console.log(myArray[i]);
+              label = document.createElement("label");
+              label.classList.add("form-check-label");
+              label.innerHTML= myArray[i];
+              var input = document.createElement("input");
+              input.classList.add("form-check-input");
+              input.type = "radio";
+              input.name = "flexRadioGroup";
+              var divInner = document.createElement('div');
+              divInner.classList.add("form-check");
+              divInner.appendChild(input);
+              divInner.appendChild(label);
+              div.appendChild(divInner);
+          }
+          document.getElementById("answers").appendChild(div);
+        }
+
         //Forms:
         if(questions[key].form01!=null){
           createTextarea("form01",questions[key].form01);
@@ -166,11 +231,14 @@ function setQuestion(q_number){
         }
       }
   }
+  var indicator= parseInt(actquestion.substring(1, 3))+"/"+Object.keys(questions).length;
+  document.getElementById("page-indicator").innerHTML=indicator;
 }
 
 function createTextarea(formnumber,question)   {
   var label = document.createElement('label');
   label.className = "form-label";
+  label.classList.add("mt-3");
   label.for = formnumber;
   label.innerHTML= question;
   var textarea = document.createElement("textarea");

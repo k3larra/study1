@@ -17,6 +17,7 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
+        <img src="images/anna1small.jpg" class="rounded float-start pe-5" alt="..." style="height:75px;">
         <a class="navbar-brand" href="#">Explainable AI</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -26,16 +27,19 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="#">Home</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link disabled" style="color:red;">DRAFT VERSION</a>
+            </li>
           </ul>
           <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
+            <!--<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+            <button class="btn btn-outline-success" type="submit">Login</button>
           </form>
         </div>
       </div>
     </nav>
   </header>
-  <div class="p-3 text-center bg-light">
+  <div class="p-3 text-center bg-light" id="meta-info">
     <h2 class="mb-3" id="studyTitle">..</h2>
     <h3 class="mb-3" id="question">...</h3>
     <div class="container">
@@ -44,7 +48,7 @@
       </div>
     </div>
   </div>
-  <div class="container mb-5 mt-5">
+  <div class="container mb-5 mt-5" id="images-and-methods">
     <div class="row align-items-start">
       <div class="col align-self-center">
         <img src="images/loading.gif" class="rounded float-start FBAimage" id="image_start" alt="Ducks in a pond">
@@ -59,7 +63,7 @@
         </div>
         <div class="waiting" id="XAIimage_waiting">
           <img src="images/Pendulum.gif" id="FBA_wait" alt="...">
-          <p>Loading...</p>
+          <p>Select Method...</p>
         </div>
       </div>
     </div>
@@ -71,6 +75,9 @@
     <div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
       <div class="btn-group" role="group" aria-label="First group">
         <button type="button" class="btn btn-outline-secondary" id="backQuestion">&larr;</button>
+      </div>
+      <div>
+        <p type="button"  id="page-indicator">4/5</p>
       </div>
       <div class="input-group">
         <button type="button" class="btn btn-outline-secondary" id="nextQuestion">Save and next &rarr;</button>
