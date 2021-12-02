@@ -12,24 +12,30 @@ if (document.readyState != 'loading'){
 // Page is loaded! Now event can be wired-up
 function onDocumentReady() {
   console.log('Document ready.');
-  document.getElementById("XAIimage").style.display = "none";
-  document.getElementById("XAIimage_waiting").style.display = "block";
-  getFirebase();
-  document.addEventListener('keydown', function(event) {
-    switch (event.key) { // change to event.key to key to use the above variable
-      case "ArrowLeft":
-        // Left pressed
-        console.log("last");
-        document.getElementById('backQuestion').click();
-        break;
-      case "ArrowRight":
-      console.log("next");
-        document.getElementById('nextQuestion').click();
-        break;
-    }
+  var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop',{
+    keyboard: false
+  }));
+  document.getElementById('XAI').addEventListener('click', function(){
+    console.log("Show it");
+    //myModal.show();
   });
+  //Autentication
+  document.getElementById('signIn').addEventListener('click', login);
+  firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+          console.log("Logged in");
+          showUserData();
+      } else {
+          console.log("Not logged in");
+          showUserData();
+      }
+  });
+  var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+  });
+  addTips();
 }
-
 function getFirebase(){
   var ref = firebase.database().ref(actTest);
   ref.once("value", function(snapshot) {
@@ -64,8 +70,18 @@ function getEventTarget(e) {
     e = e || window.event;
     return e.target || e.srcElement;
 }
-
 function addListeners(){
+  document.addEventListener('keydown', function(event) {
+    switch (event.key) { // change to event.key to key to use the above variable
+      case "ArrowLeft":
+        // Left pressed
+        document.getElementById('backQuestion').click();
+        break;
+      case "ArrowRight":
+        document.getElementById('nextQuestion').click();
+        break;
+    }
+  });
   var ul = document.getElementById('FBA_items');
   ul.onclick = function(event) {
       var target = getEventTarget(event);
@@ -75,6 +91,7 @@ function addListeners(){
   };
   document.getElementById('nextQuestion').addEventListener("click",function() {
   //     document.getElementById('FBA').src= '../images/saliencymap_duck.png';
+        addInfoFromPage(actTest,actquestion)
         updateActQuestion(false);
         setQuestion(actquestion);
   });
@@ -87,8 +104,6 @@ function addListeners(){
       document.getElementById('FBA').src="images/not-found-image.jpg"
     });
 }
-
-
 function updateActQuestion(back) {
   var tempquestion = actquestion;
   if (back) {
@@ -114,7 +129,7 @@ function updateActQuestion(back) {
             tempquestion = "q" + number;
           }
         }else{
-          alert("exit");
+          document.getElementById('signIn').click();;
         }
       }
     }
@@ -126,7 +141,6 @@ function updateActQuestion(back) {
     }
   }
 }
-
 function setQuestion(q_number){
   document.getElementById('answers').innerHTML = "";
   for (var key of Object.keys(questions)) {
@@ -143,7 +157,6 @@ function setQuestion(q_number){
           document.getElementById('pred_acc').classList.remove("text-start");
           document.getElementById('pred_acc').innerHTML="";
         } else if (questions[key].layout==0) {
-            console.log("What");
             document.getElementById('images-and-methods').style.display = "none";
             document.getElementById('pred_acc').innerHTML=questions[key].info1;
             document.getElementById('pred_acc').classList.add("text-start");
@@ -181,6 +194,7 @@ function setQuestion(q_number){
             var input = document.createElement("input");
             input.classList.add("form-check-input");
             input.type = "checkbox";
+            input.name = "checkbox1";
             var divInner = document.createElement('div');
             divInner.classList.add("form-check");
             divInner.appendChild(input);
@@ -199,14 +213,13 @@ function setQuestion(q_number){
           label.innerHTML=myArray[0];
           div.appendChild(label);
           for (var i = 1; i < myArray.length; i++) {
-              console.log(myArray[i]);
               label = document.createElement("label");
               label.classList.add("form-check-label");
               label.innerHTML= myArray[i];
               var input = document.createElement("input");
               input.classList.add("form-check-input");
               input.type = "radio";
-              input.name = "flexRadioGroup";
+              input.name = "checkbox2";
               var divInner = document.createElement('div');
               divInner.classList.add("form-check");
               divInner.appendChild(input);
@@ -234,7 +247,6 @@ function setQuestion(q_number){
   var indicator= parseInt(actquestion.substring(1, 3))+"/"+Object.keys(questions).length;
   document.getElementById("page-indicator").innerHTML=indicator;
 }
-
 function createTextarea(formnumber,question)   {
   var label = document.createElement('label');
   label.className = "form-label";
@@ -249,7 +261,6 @@ function createTextarea(formnumber,question)   {
   document.getElementById("answers").appendChild(label);
   document.getElementById("answers").appendChild(textarea);
 }
-
 function clearAllMarks(){
   var ul = document.getElementById("FBA_items");
   var items = ul.getElementsByTagName("li");
@@ -259,7 +270,162 @@ function clearAllMarks(){
   document.getElementById("XAIimage").style.display = "block";
   document.getElementById("XAIimage_waiting").style.display = "none";
 }
+function login(e) {
+    e.preventDefault();
+    var authData = firebase.auth().currentUser;
+    if (!authData) { //Sign in
+        var provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider);
+    } else { //Sign out
+        console.log("Signing out");
+        document.getElementById("signIn").innerHTML = "Sign In";
+        firebase.auth().signOut();
+        document.getElementById("not-logged-in").style.display = "block";
+        document.getElementById("loggedIn").style.display = "none";
+    }
+}
+function showUserData() {
+    var user = firebase.auth().currentUser;
+    var ref = firebase.database().ref();
+    if (user != null) {
+        //Fix firebase
+        document.getElementById("signIn").innerHTML = "Sign Out";
+        var usersRef = ref.child("users/" + user.uid);
+        usersRef.once("value", function(snapshot) {
+             var userInfo = snapshot.val();
+              if (userInfo === null) { //New user
+                  addNewUser(user.uid, user.displayName, user.email);
+                  document.getElementById('userInfo').innerHTML = user.displayName + " waiting for approval";
+             } else {
+                 updateUser(user.uid, user.displayName, user.email);
+                 if (userInfo.approved) {
+                     getFirebase();
+                     document.getElementById("signIn").innerHTML = "Sign Out";
+                     document.getElementById('userInfo').innerHTML = "Logged in as " + user.displayName;
+                     document.getElementById("XAIimage").style.display = "none";
+                     document.getElementById("XAIimage_waiting").style.display = "block";
+                     document.getElementById("not-logged-in").style.display = "none";
+                     document.getElementById("loggedIn").style.display = "block";
+                 } else {
+                     document.getElementById('userInfo').innerHTML = user.displayName + " waiting for approval";
+                 }
+             }
+         });
+        console.log("Logged in");
 
+    } else {
+        document.getElementById("signIn").innerHTML = "Sign In";
+        console.log("User not logged in");
+        document.getElementById('images-and-methods').style.display = "none"
+        document.getElementById("XAIimage").style.display = "none";
+        document.getElementById("XAIimage_waiting").style.display = "none";
+        document.getElementById('userInfo').innerHTML = "";
+    }
+}
+function addNewUser(_id, _name, _email) {
+    var myFirebaseRef = firebase.database().ref();
+    var usersRef = myFirebaseRef.child("users/" + _id);
+    var entrypoint = {
+        role: "user",
+        approved: false,
+        name: _name,
+        email: _email
+    };
+    usersRef.update(entrypoint);
+    usersRef.child("groups").push("default");
+}
+function updateUser(_id, _name, _email) {
+    var myFirebaseRef = firebase.database().ref();
+    var usersRef = myFirebaseRef.child("users/" + _id);
+    var entrypoint = {
+        name: _name,
+        email: _email,
+    };
+    usersRef.update(entrypoint);
+}
+function addInfoFromPage(actTest,actquestion){
+  var checkbox1_value="";
+  var checkbox2_value="";
+  var form01_value="";
+  var form02_value="";
+  var form03_value="";
+  var form04_value="";
+  var element=null;
+  console.log(actTest,actquestion);
+    if(questions[actquestion].checkbox1!=null){
+      console.log("checkbox1_exists");
+      element= document.getElementsByName("checkbox1");
+      for(var i = 0; i < element.length; i++) {
+         if(element[i].checked){
+           console.log(element[i].nextSibling.innerHTML);
+           if(element[i].checked){
+               try {
+                 checkbox2_value = checkbox2_value +";"+ element[i].nextSibling.innerHTML;
+               } catch (e) {}
+            }
+           }
+       }
+    }
+    if(questions[actquestion].checkbox2!=null){
+        console.log("checkbox2_exists");
+        element = document.getElementsByName("checkbox2");
+        console.log(element);
+        for(var i = 0; i < element.length; i++) {
+          console.log(element[i],element[i].value, element[i].checked);
+           if(element[i].checked){
+               try {
+                 checkbox2_value = checkbox2_value +";"+ element[i].nextSibling.innerHTML;
+               } catch (e) {}
+            }
+         }
+    }
+    if(questions[actquestion].form01!=null){
+      element = document.getElementById("form01");
+      try {
+        form01_value = element.previousSibling.innerHTML+":"+element.value;
+      } catch (e) {}
+    }
+    if(questions[actquestion].form02!=null){
+      element = document.getElementById("form02");
+      try {
+        form02_value= element.previousSibling.innerHTML+":"+element.value;
+      } catch (e) {}
+    }
+    if(questions[actquestion].form03!=null){
+      element = document.getElementById("form03");
+      try{
+      form03_value= element.previousSibling.innerHTML+":"+element.value;
+      } catch (e) {}
+    }
+    if(questions[actquestion].form04!=null){
+      element = document.getElementById("form04");
+      try{
+        form04_value=element.previousSibling.innerHTML+":"+element.value;
+      } catch (e) {}
+    }
+    console.log("c1:"+checkbox1_value);
+    console.log("c2:"+checkbox2_value);
+    console.log("form01:"+form01_value);
+    console.log("form02:"+form02_value);
+    console.log("form03:"+form03_value);
+    console.log("form04:"+form04_value);
+    addPageAnswer(checkbox1_value,checkbox2_value,form01_value,form02_value,form03_value,form04_value);
+}
+
+function addPageAnswer(_checkbox1, _checkbox2, _form01,_form02, _form03, _form04) {
+  var myFirebaseRef = firebase.database().ref();
+  var user = firebase.auth().currentUser;
+  var usersRef = myFirebaseRef.child("users/" + user.uid+"/"+actTest+"/"+actquestion) ;
+  var entrypoint = {
+      checkbox1: _checkbox1,
+      checkbox2: _checkbox2,
+      form01: _form01,
+      form02: _form02,
+      form03: _form03,
+      form04: _form04
+  };
+  usersRef.update(entrypoint);
+}
 // function PreLoadAllImages() {
 //   var images = new Array();
 //   var numberofimages = 0, loadedimages = 0;
@@ -279,3 +445,8 @@ function clearAllMarks(){
 //
 //   preload('../images/saliencymap_duck.png', '../images/ig_duck.png','../images/sg_duck.png','../images/gradcam_duck.png','../images/lrp_duck.png','../images/deeplift_duck.png','../images/gb_duck.png');
 // }
+
+//tooltips
+function addTips(){
+  document.getElementById('FBA_items').title="Här tänker jag rensa lite och hitta mer beskrivande namn:Kontrastskapande <b>SmothGRad</b>Markering av område <b>GradCAM</b>";
+}
