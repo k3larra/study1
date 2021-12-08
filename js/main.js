@@ -4,13 +4,6 @@ var actimage = "";
 var actquestion = null;
 var questions;
 let methods = [];
-fetch('/test')
-    .then(function (response) {
-        return response.json();
-    }).then(function (text) {
-        console.log('GET response:');
-        console.log(text.greeting);
-    });
 if (document.readyState != 'loading'){
   onDocumentReady();
 } else {
@@ -19,6 +12,10 @@ if (document.readyState != 'loading'){
 // Page is loaded! Now event can be wired-up
 function onDocumentReady() {
   console.log('Document ready.');
+  //getHello(); //Test
+  //getTest(); //Test
+  //getData(45); //Test
+  getClassification("gs.jpg")
   var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop',{
     keyboard: false
   }));
@@ -43,6 +40,58 @@ function onDocumentReady() {
   });
   addTips();
 }
+
+////Test stuff
+function getHello() {
+    const url = '/hello'
+    fetch(url)
+    .then(response => response.json())
+    .then(json => {
+        console.log(json.jack);
+    })
+}
+
+function getTest(){
+  fetch('/test')
+      .then(function (response) {
+          return response.json();
+      }).then(function (text) {
+          console.log('GET response:');
+          console.log(text.greeting);
+      });
+}
+
+function getData(index){
+    fetch('/getdata/'+index)
+      .then(function (response) {
+          return response.text();
+      }).then(function (text) {
+          console.log('GET response text:');
+          console.log(text);
+      });
+}
+//End test stuff;
+
+function getClassification(imageName){
+    fetch('/classify/'+imageName)
+    .then(response => response.json())
+    .then(json => {
+        var html="Confidence level:"
+        console.log(JSON.stringify(json[1]));
+        for (const [key, value] of Object.entries(json)) {
+             var s=JSON.stringify(value);
+            console.log(s.split("\"")[1]);
+            html=html+"<b>"+s.split("\"")[1]+"</b>, "+s.split(":")[1];
+        }
+       // Object.entries(json).forEach(
+       //     ([key, value]) => console.log(key, value)
+        //);
+     console.log(html);
+     return html;
+    });
+}
+
+
 function getFirebase(){
   var ref = firebase.database().ref(actTest);
   ref.once("value", function(snapshot) {
@@ -160,6 +209,9 @@ function setQuestion(q_number){
           document.getElementById('image_start').src='../images/loading.gif';
           document.getElementById('images-and-methods').style.display = "block";
           actimage = questions[key].img;
+          document.getElementById('pred_acc').classList.remove("text-start");
+          document.getElementById('pred_acc').innerHTML=getClassification(actimage);
+
           document.getElementById('image_start').src='../images/'+actimage;
           document.getElementById('pred_acc').classList.remove("text-start");
           document.getElementById('pred_acc').innerHTML="";
@@ -169,9 +221,9 @@ function setQuestion(q_number){
             document.getElementById('pred_acc').classList.add("text-start");
         }
         //Predict if not already done
+          /*
         if (actquestion=="q02"){
           document.getElementById('pred_acc').classList.remove("text-start");
-
           document.getElementById('pred_acc').innerHTML="Confidence level: <b>Drake</b> 21%, <b>Red-Breasted Merganser</b> 5%, <b>Maillot</b> 4%, <b>Prairie Chicken</b> 3%, <b>Leatherback Turtle</b> 3%";
         }else if (actquestion=="q03"){
           document.getElementById('pred_acc').classList.remove("text-start");
@@ -185,7 +237,7 @@ function setQuestion(q_number){
         }else if (actquestion=="q06"){
           document.getElementById('pred_acc').classList.remove("text-start");
           document.getElementById('pred_acc').innerHTML="Confidence level: <b>Lemon</b> 67%, <b>Orange</b> 17%, <b>Spaghetti Squash</b> 12%, <b>Black Widow</b> 0.3%, <b>Pineapple</b> 0.3%";
-        }
+        }*/
         //questionCheckBox
         if(questions[key].checkbox1!=null){
           var div = document.createElement('div');
