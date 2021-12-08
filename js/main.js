@@ -4,6 +4,13 @@ var actimage = "";
 var actquestion = null;
 var questions;
 let methods = [];
+fetch('/test')
+    .then(function (response) {
+        return response.json();
+    }).then(function (text) {
+        console.log('GET response:');
+        console.log(text.greeting);
+    });
 if (document.readyState != 'loading'){
   onDocumentReady();
 } else {
@@ -164,6 +171,7 @@ function setQuestion(q_number){
         //Predict if not already done
         if (actquestion=="q02"){
           document.getElementById('pred_acc').classList.remove("text-start");
+
           document.getElementById('pred_acc').innerHTML="Confidence level: <b>Drake</b> 21%, <b>Red-Breasted Merganser</b> 5%, <b>Maillot</b> 4%, <b>Prairie Chicken</b> 3%, <b>Leatherback Turtle</b> 3%";
         }else if (actquestion=="q03"){
           document.getElementById('pred_acc').classList.remove("text-start");
