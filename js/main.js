@@ -1,6 +1,8 @@
 'use strict';
 var actTest = "Test01";
 var actimage = "";
+var actlabelid = "0"; //Her the last classification is saved
+var actlabel = "horse"; //Her the last classification is saved
 var actquestion = null;
 var questions;
 let methods = [];
@@ -15,7 +17,7 @@ function onDocumentReady() {
   //getHello(); //Test
   //getTest(); //Test
   //getData(45); //Test
-  getClassification("gs.jpg")
+  //getClassification("gs.jpg")
   var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop',{
     keyboard: false
   }));
@@ -71,23 +73,45 @@ function getData(index){
       });
 }
 //End test stuff;
+//Asynchronos functions for FBA methods
+//Calls the occolsion method in captum and returns the image path to created image
+function occlusion(filename,label){
+    fetch('/occlusion/'+filename+"/"+label)
+      .then(function (response) {
+          return response.text();
+      }).then(function (filename) {
+          console.log(filename);
+          document.getElementById("XAIimage").style.display = "block";
+          document.getElementById("XAIimage_waiting").style.display = "none";
+          if (filename.length>3){
+            document.getElementById('FBA').src=filename;
+          }else {
+              document.getElementById('FBA').src="images/not-found-image.jpg"
+          }
+      }).catch(function(error){
+          console.error('Error:', error);
+      });
+}
 
 function getClassification(imageName){
     fetch('/classify/'+imageName)
     .then(response => response.json())
     .then(json => {
         var html="Confidence level:"
-        console.log(JSON.stringify(json[1]));
         for (const [key, value] of Object.entries(json)) {
-             var s=JSON.stringify(value);
-            console.log(s.split("\"")[1]);
-            html=html+"<b>"+s.split("\"")[1]+"</b>, "+s.split(":")[1];
+            const arr = (value.label).split(" ");
+            for (var i = 0; i < arr.length; i++) {
+                 arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+            }
+            const cap = arr.join(" ");
+            html=html+" <b>"+cap+"</b> "+value.probability*100+"%, ";
+            if(key==0){
+                 document.getElementById('prediction').innerHTML=" "+cap+"?";
+                 actlabelid = value.labelid;
+                 actlabel = value.label;
+            }
         }
-       // Object.entries(json).forEach(
-       //     ([key, value]) => console.log(key, value)
-        //);
-     console.log(html);
-     return html;
+     document.getElementById('pred_acc').innerHTML=html;
     });
 }
 
@@ -143,7 +167,20 @@ function addListeners(){
       var target = getEventTarget(event);
       clearAllMarks();
       target.classList.add('marker');
-      document.getElementById('FBA').src='../images/'+target.id+'_'+actimage;
+      document.getElementById("XAIimage").style.display = "none";
+      document.getElementById("XAIimage_waiting").style.display = "block";
+      switch(target.id) {
+        case "deeplift":
+          occlusion(actimage,actlabelid)
+        break;
+        case gradcam:
+          console.log("gradcam")
+        break;
+        default:
+          console.log("method not implemented here")
+          document.getElementById('FBA').src="images/not-found-image.jpg"
+      }
+      //document.getElementById('FBA').src='../images/'+target.id+'_'+actimage;
   };
   document.getElementById('nextQuestion').addEventListener("click",function() {
   //     document.getElementById('FBA').src= '../images/saliencymap_duck.png';
@@ -199,6 +236,8 @@ function updateActQuestion(back) {
 }
 function setQuestion(q_number){
   document.getElementById('answers').innerHTML = "";
+  document.getElementById('pred_acc').innerHTML="";
+  document.getElementById('prediction').innerHTML="";
   for (var key of Object.keys(questions)) {
       if(key==actquestion){
         document.getElementById('question').innerHTML=questions[key].question;
@@ -210,11 +249,9 @@ function setQuestion(q_number){
           document.getElementById('images-and-methods').style.display = "block";
           actimage = questions[key].img;
           document.getElementById('pred_acc').classList.remove("text-start");
-          document.getElementById('pred_acc').innerHTML=getClassification(actimage);
-
+          getClassification(actimage);
           document.getElementById('image_start').src='../images/'+actimage;
           document.getElementById('pred_acc').classList.remove("text-start");
-          document.getElementById('pred_acc').innerHTML="";
         } else if (questions[key].layout==0) {
             document.getElementById('images-and-methods').style.display = "none";
             document.getElementById('pred_acc').innerHTML=questions[key].info1;
@@ -411,13 +448,13 @@ function addInfoFromPage(actTest,actquestion){
   var form03_value="";
   var form04_value="";
   var element=null;
-  console.log(actTest,actquestion);
+  //console.log(actTest,actquestion);
     if(questions[actquestion].checkbox1!=null){
-      console.log("checkbox1_exists");
+      //console.log("checkbox1_exists");
       element= document.getElementsByName("checkbox1");
       for(var i = 0; i < element.length; i++) {
          if(element[i].checked){
-           console.log(element[i].nextSibling.innerHTML);
+           //console.log(element[i].nextSibling.innerHTML);
            if(element[i].checked){
                try {
                  checkbox2_value = checkbox2_value +";"+ element[i].nextSibling.innerHTML;
@@ -427,11 +464,11 @@ function addInfoFromPage(actTest,actquestion){
        }
     }
     if(questions[actquestion].checkbox2!=null){
-        console.log("checkbox2_exists");
+        //console.log("checkbox2_exists");
         element = document.getElementsByName("checkbox2");
-        console.log(element);
+        //console.log(element);
         for(var i = 0; i < element.length; i++) {
-          console.log(element[i],element[i].value, element[i].checked);
+          //console.log(element[i],element[i].value, element[i].checked);
            if(element[i].checked){
                try {
                  checkbox2_value = checkbox2_value +";"+ element[i].nextSibling.innerHTML;
@@ -463,12 +500,6 @@ function addInfoFromPage(actTest,actquestion){
         form04_value=element.previousSibling.innerHTML+":"+element.value;
       } catch (e) {}
     }
-    console.log("c1:"+checkbox1_value);
-    console.log("c2:"+checkbox2_value);
-    console.log("form01:"+form01_value);
-    console.log("form02:"+form02_value);
-    console.log("form03:"+form03_value);
-    console.log("form04:"+form04_value);
     addPageAnswer(checkbox1_value,checkbox2_value,form01_value,form02_value,form03_value,form04_value);
 }
 
